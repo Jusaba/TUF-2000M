@@ -79,14 +79,14 @@ void WriteNumber ( int nNumero, int nDecimales )
   */
   long LeeRegistrosLong ( int nRegistro )
   {
-      uint16_t buf[FLOAT_DATA_SIZE];
+      uint16_t buf[LONG_DATA_SIZE];
       uint8_t j, result;
       uint16_t temp;
       long DatoSalida = -1;
       result = TUF.readHoldingRegisters(nRegistro, LONG_DATA_SIZE);
       if (result == TUF.ku8MBSuccess)
       {
-        for (j = 0; j < FLOAT_DATA_SIZE; j++)
+        for (j = 0; j < LONG_DATA_SIZE; j++)
         {
           buf[j] = TUF.getResponseBuffer(j);
         }    
@@ -123,7 +123,7 @@ void WriteNumber ( int nNumero, int nDecimales )
       result = TUF.readHoldingRegisters(nRegistro, FLOW_DATA_SIZE);
       if (result == TUF.ku8MBSuccess)
       {
-        for (j = 0; j < FLOAT_DATA_SIZE; j++)
+        for (j = 0; j < FLOAT_DATA_SIZE; j++)FLOAT_DATA_SIZE
         {
           buf[j] = TUF.getResponseBuffer(j);
         }    
@@ -169,6 +169,7 @@ void WindowMenu (int nMenu)
 *   ConfiguraTransducerMounting () -> V 
 *   ConfigurcionSave() 
 */
+
 /**
 * @brief Configura el idioma a Ingles
 */
@@ -483,7 +484,6 @@ void ConfiguracionSave (void)
 */
 void ConfiguraPipe (void)
 {
-  
   ConfiguraOuterDiameterPipe ();
   ConfiguraThicknessPipe ();
   ConfiguraMaterialPipe ();
