@@ -27,8 +27,8 @@
 
 
 #define FLOW_DATA_SIZE 2
-#define LONG_DATA_SIZE 2
 
+#define LONG_DATA_SIZE 2
 #define FLOAT_DATA_SIZE  2
 
 // Registros de datos
@@ -123,20 +123,21 @@ void WindowMenu (int nMenu);																	//Funcion para ir a un Menu determi
 void ConfiguraIdioma (void);																	//Funcion que configura el idioma
 void ConfiguraHoraFecha (  int nSg, int nMinutos, int nHora, int nDia, int nMes, int nAno );	//Funcion para configurar la fecha y hora del TUF-2000M
 void ConfiguraUnidades (void);																	//Funcion que configura las unidades del fluido y fe tiempo
-void ConfiguraPipe (void);																		//Configura las caracteristicas de la tuberia									
-	void ConfiguraOuterDiameterPipe (void);														//Configura el diametro exterior de la tuberia
-	void ConfiguraThicknessPipe (void);															//Configura el grosor del cobre
-	void ConfiguraMaterialPipe (void);															//Configura el material de la tuberia
-void ConfiguraFluidType (void);
-void ConfiguraTransducerType (void);
-void ConfiguraTransducerMounting (void);
-void ConfiguracionSave(void);
-void Configura(void);
+void Configura(void);																			//Realiza toda la configuracion del sistema con los siguientes configuraciones
+	void ConfiguraPipe (void);																	//Configura las caracteristicas de la tuberia									
+		void ConfiguraOuterDiameterPipe (void);													//Configura el diametro exterior de la tuberia
+		void ConfiguraThicknessPipe (void);														//Configura el grosor del cobre
+		void ConfiguraMaterialPipe (void);														//Configura el material de la tuberia
+		void ConfiguraFluidType (void);															//Configura el tipo de fluido
+		void ConfiguraTransducerType (void);													//Configura el tipo de transductor
+		void ConfiguraTransducerMounting (void);												//Configura el modo de instalacion de los sensores
+		void ConfiguracionSave(void);															//Salva la configuracion a memoria Flash del TUF-2000M
 
-int IntToBcd (int nDato );
-void WriteNumber ( int nNumero );
-float LeeRegistrosFloat ( int nRegistro );
-long LeeRegistrosLong ( int nRegistro );
+
+int IntToBcd (int nDato );																		//Convierte un numero decimal en el correposndiente BCD
+void WriteNumber ( int nNumero );																//Escribe un numero en un registro digito a digito
+float LeeRegistrosFloat ( int nRegistro );														//Lee el dato float de un par de registyros
+long LeeRegistrosLong ( int nRegistro );														//Lee el dato long de un par de registros
 
 float readFlow(void);
 float ReadPositiveAcumulator (void);
