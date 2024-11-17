@@ -47,7 +47,8 @@ Las funciones que se han dispuesto para acceso a la configuración son
 
 A titulo de ejemplo, para configurar en el dispositivo el idioma inglés, lo podríamso hacer con el siguiente código
 
-´´´
+```C++
+
     #define Menu_Idioma	0x0039       //Menu Idioma
     #define Ingles      0x33         //Ingles es la opción 3
     #define Key_Enter   0x003D       //Enter
@@ -68,5 +69,28 @@ A titulo de ejemplo, para configurar en el dispositivo el idioma inglés, lo pod
       delay(20); 	  
   }	
 
-´´´
+```
 
+Cada **menú** tiene distintas opciones, en TUF2000M.h se han definido unas cuantas opciones, solo las que se han necesitado en el proyecto. Lo suyo sería definir todas las opciones pero queda como tarea pendiente definir las ocpciones necesarias en cada proyecto.
+
+Las definiciones son las siguientes
+
+```C++
+//Opciones en Menu 14
+#define Cobre            0x34  //Material de la tuberia Cobre(4). Mas Opciones descritas en M14    
+//Opciones en Menu 20
+#define Agua             0x30  //Fluido por a tuberia Agua(0). Mas Opciones descritas en M20
+//Opciones en Menu 23
+#define ClampOnTS2         19  //Sensores utilizados TS2 (19). Mas Opciones descritas en M23  
+//Opciones en Menu 24
+#define VMethod          0x30  //Metodo de instalacion de los sensores V (0). Mas Opciones descritas en M24  
+//Opciones en Menu 31
+#define Metros3          0x30  //Unidades empleadas m3 (0). Mas Opciones descritas en M31 
+#define Litros           0x31  //Unidades empleadas litros (1). Mas Opciones descritas en M31 
+#define Hora             0x30  //Unidades de tiempo Hora (0)
+#define Dia              0x31  //Unidades de tiempo Dia  (1)
+#define Segundo          0x32  //Unidades de tiempo Segundo (2)
+#define Minuto           0x33  //Unidades de tiempo Minuto (3)
+//Opciones en Menu 39
+#define Ingles	         0x33  //Idioma utilizado Ingles(3). Mas Opciones descritas en M39	           
+```
