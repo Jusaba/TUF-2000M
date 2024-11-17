@@ -45,6 +45,8 @@ Las funciones que se han dispuesto para acceso a la configuración son
     void EnterKey (int nKey);	  //Funcion para simular la pulsacion de una tecla o la entrada de un digito
     void WindowMenu (int nMenu);  //Funcion para ir a un Menu determinado
 
+
+
 A titulo de ejemplo, para configurar en el dispositivo el idioma inglés, lo podríamso hacer con el siguiente código
 
 ```C++
@@ -73,24 +75,37 @@ A titulo de ejemplo, para configurar en el dispositivo el idioma inglés, lo pod
 
 Cada **menú** tiene distintas opciones, en TUF2000M.h se han definido unas cuantas opciones, solo las que se han necesitado en el proyecto. Lo suyo sería definir todas las opciones pero queda como tarea pendiente definir las ocpciones necesarias en cada proyecto.
 
-Las definiciones son las siguientes
+Otras funciones necesarias para configurar o leer los datos de los **registros**  del dispositivo son:
+
+    int IntToBcd (int nDato );					        //Convierte un numero decimal en el correposndiente BCD 
+    void WriteNumber ( int nNumero, int nDecimales );	//Escribe un numero en un registro digito a digito
+    float LeeRegistrosFloat ( int nRegistro );	        //Lee el dato float de un par de registyros
+    long LeeRegistrosLong ( int nRegistro );	        //Lee el dato long de un par de registros
+
+## Funciones de configuración.
+El funciones para configurar el dispositivo son las siguientes:
+
+    void ConfiguraIdioma (void); 	         //Funcion que configura el idioma
+    void ConfiguraUnidades (void);	         //Funcion que configura las unidades del fluido y de tiempo
+	void ConfiguraOuterDiameterPipe (void);	 //Configura el diametro exterior de la tuberia
+	void ConfiguraThicknessPipe (void);		 //Configura el grosor del cobre
+	void ConfiguraMaterialPipe (void);		 //Configura el material de la tuberia
+	void ConfiguraFluidType (void);			 //Configura el tipo de fluido
+	void ConfiguraTransducerType (void);	 //Configura el tipo de transductor
+	void ConfiguraTransducerMounting (void); //Configura el modo de instalacion de los sensores
+
+No se han desarrollado todas las funciones posible pero cualquiera de las relacionadas puede servir de guía para poder crear cualquier otra que se necesite en un proyecto especifico.
+
+Unas funciones funcionan como la detallada para configurar el idioma, otras como por ejemplo la del diametro de la tuberia necesita que se introduzca el diametro dígito a dígito, por ejemplo para poner un diametro de 20,5 mm será necesario simular la pulsación de el 2, luego el 0, la coma y el 5 y lo haríamos de la siguiente forma
 
 ```C++
-//Opciones en Menu 14
-#define Cobre            0x34  //Material de la tuberia Cobre(4). Mas Opciones descritas en M14    
-//Opciones en Menu 20
-#define Agua             0x30  //Fluido por a tuberia Agua(0). Mas Opciones descritas en M20
-//Opciones en Menu 23
-#define ClampOnTS2         19  //Sensores utilizados TS2 (19). Mas Opciones descritas en M23  
-//Opciones en Menu 24
-#define VMethod          0x30  //Metodo de instalacion de los sensores V (0). Mas Opciones descritas en M24  
-//Opciones en Menu 31
-#define Metros3          0x30  //Unidades empleadas m3 (0). Mas Opciones descritas en M31 
-#define Litros           0x31  //Unidades empleadas litros (1). Mas Opciones descritas en M31 
-#define Hora             0x30  //Unidades de tiempo Hora (0)
-#define Dia              0x31  //Unidades de tiempo Dia  (1)
-#define Segundo          0x32  //Unidades de tiempo Segundo (2)
-#define Minuto           0x33  //Unidades de tiempo Minuto (3)
-//Opciones en Menu 39
-#define Ingles	         0x33  //Idioma utilizado Ingles(3). Mas Opciones descritas en M39	           
+    WriteNumber ( 205, 1);
 ```
+
+La función **ConfiguraTransducerType()** necesita una mención especial, NO HE CONSEGUIDO poener el número 19 que es el tipo que se necesita en este proyecto y he tenido que hacerlo de una forma un tanto anormal. Si el tipo es menor que 10, se simula directamente el digito correspondiente al tipo deseado, si es mayor de 9, se simula la pulsación del 9 y luego se simula la tecla de incrementar hasta alcanzar el nuemro correspondiente al tipo deseado. Seguro que no es la manera adecuada pero ha sido la manera con la que lo he conseguido.
+
+Se han creado otras dos funciones para configuración paro que no hacen otra cosa que llamar a las anteriores
+
+    void Configura(void);	    //Realiza toda la configuracion del sistema 
+	void ConfiguraPipe (void);	//Configura las caracteristicas de la tuberia									
+
