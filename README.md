@@ -36,14 +36,37 @@ En primer lugar, como se ha dicho, la mayor parte de la configuración del dispo
 
 El **registro 60** denominado **GO TO WINDOW** nos permite acceder al **menu** de la posición indicada por este registro, si queremos acceder al **menú 39** que es el **menú** para la configuración del idioma,  pondremos en el **registro 60** el valor **39**.
 
-El **registro 59** denominado **KEY TO IMPUT** nos permite simular la pulsación de una de las teclas del frontal o la pulsación de un número, para conseguirlo deberemos introducir en el **registro 59** el código de la tecla que queremos pulsar según la taqbla detallada en el apartado **7.4 KEY VALUE TABLE** del manual.
+El **registro 59** denominado **KEY TO IMPUT** nos permite simular la pulsación de una de las teclas del frontal o la pulsación de un número, para conseguirlo deberemos introducir en el **registro 59** el código de la tecla que queremos pulsar según la tabla detallada en el apartado **7.4 KEY VALUE TABLE** del manual.
 
 Con estos dos **registros** podemos acceder con el **ESP32**  a los **menús** como si lo hicieramos desde el frontal del dispositivo.
 
-Las funciones que se han dispouesto para acceso a la configuración son
+Las funciones que se han dispuesto para acceso a la configuración son
 
-    void EnterKey (int nKey);			//Funcion para simular la pulsacion de una tecla o la entrada de un digito
-    void WindowMenu (int nMenu);    	//Funcion para ir a un Menu determinado
+    void EnterKey (int nKey);	  //Funcion para simular la pulsacion de una tecla o la entrada de un digito
+    void WindowMenu (int nMenu);  //Funcion para ir a un Menu determinado
 
+A titulo de ejemplo, para configurar en el dispositivo el idioma inglés, lo podríamso hacer con el siguiente código
 
+´´´
+    #define Menu_Idioma	0x0039       //Menu Idioma
+    #define Ingles      0x33         //Ingles es la opción 3
+    #define Key_Enter   0x003D       //Enter
+    
+    uint8_t result;
+
+  WindowMenu(Menu_Idioma);           //Vamos al Menu 30 que es el de idioma
+  delay(20);  
+  if (result == TUF.ku8MBSuccess)    //Si ha habido exito
+  {
+      EnterKey(Key_Enter);          //Simulamos la tecla <ENT>
+      delay(20);    
+      EnterKey(Idioma);             //Simulamos la opción 3 del Menu
+      delay(20);
+      EnterKey(Key_Enter);          //Volvemos a pulsar <ENT>
+      delay(20);
+      WindowMenu (Menu_0);          //Vamos a la pantalla de menu 0
+      delay(20); 	  
+  }	
+
+´´´
 
