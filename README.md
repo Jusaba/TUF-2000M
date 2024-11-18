@@ -28,6 +28,8 @@ Esos **registros** son de 16 bit y almacenan datos en formato pareja de BCD de 2
 
 La mayor parte de la configuración debe hacerse con los **menús**, para acceder a los datos, se puede hacer por pantalla o bien leyendo con el **ESP32** por **MODBUS RS-485** los **registros** mencionados anteriormente.
 
+Se han definido unos cuantos **menus**, unos cuantos **registros** y unas cuantas opciones de **menus**, los necesarios para la puesta en marcha del proyecto que ha originado la creación de esta libreria. Las definiciones son una minima parte de las que realmente existen y lo suyo sería contemplarlas todas pero como que no aporta nada al proyecto se deja pendiente para que se puedan definir en otros proyectos.
+
 ## Funciones basicas de la libreria.
 
 En este apartado se describirán las funciones que consideraremos auxiliares para poder manejar el dispositivo.
@@ -73,7 +75,7 @@ A titulo de ejemplo, para configurar en el dispositivo el idioma inglés, lo pod
 
 ```
 
-Cada **menú** tiene distintas opciones, en **TUF2000M.h** se han definido unas cuantas opciones, solo las que se han necesitado en el proyecto. Lo suyo sería definir todas las opciones pero queda como tarea pendiente definir las ocpciones necesarias en cada proyecto.
+Como se ha comentado anteriormente, cada **menú** tiene distintas opciones, en **TUF2000M.h** se han definido unas cuantas opciones, solo las que se han necesitado en el proyecto. 
 
 Otras funciones necesarias para configurar o leer los datos de los **registros**  del dispositivo son:
 
@@ -108,3 +110,22 @@ La función **ConfiguraTransducerType()** necesita una mención especial, NO HE 
 						
 
 ## Funciones de lectura de datos.
+
+Para leer datos se han diseñado unas funciones que leen los **registros** concretos con la información que se desea leer y devuelven el dato leido en el formato del dato almacenado en el registro
+
+Como ejemplo, la función se presenta el codigo que lee el caudal instantaneo que está almacenado en el par de registros 1 y 2 en formato float              
+
+```C++
+#define Registro_Flow                          1
+/**
+* @brief Lee el registro 'flow RATE' (0001) 
+* 
+*/
+float ReadFlow(void) {
+
+    float flow = LeeRegistrosFloat(Registro_Flow);
+    return (flow);
+  
+  }
+```
+Al igual que en las funciones de configuración, solo se han diseñado las funciones utilizadas en el proyecto pero cualquiera de ellas puede servir como guia para recopilar otra información no recogida en este proyecto
