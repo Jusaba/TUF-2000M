@@ -1,4 +1,4 @@
-# TUF-2000M
+# TUF-2000M con ARDUINO
 
 TUF-2000M es un medidor de flujo ultrasonico
 
@@ -108,6 +108,13 @@ Unas funciones funcionan como la detallada para configurar el idioma, otras como
 
 La función **ConfiguraTransducerType()** necesita una mención especial, NO HE CONSEGUIDO poener el número 19 que es el tipo que se necesita en este proyecto y he tenido que hacerlo de una forma un tanto anormal. Si el tipo es menor que 10, se simula directamente el digito correspondiente al tipo deseado, si es mayor de 9, se simula la pulsación del 9 y luego se simula la tecla de incrementar hasta alcanzar el nuemro correspondiente al tipo deseado. Seguro que no es la manera adecuada pero ha sido la manera con la que lo he conseguido.
 						
+Otra función de configuración totalmente deistina a las vistas hasta ahora es la que se encarga de registrar la fecha y hora del dispositivo
+
+La función utilizada es la siguiente
+
+    void ConfiguraHoraFecha (  int nSg, int nMinutos, int nHora, int nDia, int nMes, int nAno );
+
+A diferencia de las otras funciones de configuración, esta no accede a un **menu** si no que escribe en unos **registros** especificos paraw la fecha y hora.
 
 ## Funciones de lectura de datos.
 

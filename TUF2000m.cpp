@@ -249,20 +249,20 @@ void ConfiguraHoraFecha (  int nSg, int nMinutos, int nHora, int nDia, int nMes,
     int Temp = 0;
     int nYear = nAno % 100;
 
-    Temp =  IntToBcd(nMinutos) << 8;
-    Temp =  Temp + IntToBcd(nSg);
-    TUF.setTransmitBuffer(0, Temp);
+    Temp =  IntToBcd(nMinutos) << 8;                                    //Minutos en formato bcd en byte alto de registro 0
+    Temp =  Temp + IntToBcd(nSg);                                       //Segundos en formato bcd en byte bajo de registro 0                              
+    TUF.setTransmitBuffer(0, Temp);         
     Temp = 0;
-    Temp = IntToBcd(nDia) << 8;
-    Temp = Temp + IntToBcd(nHora);
-    TUF.setTransmitBuffer(1, Temp);
+    Temp = IntToBcd(nDia) << 8;                                         //Dia en formato bcd en byte alto de registro 1
+    Temp = Temp + IntToBcd(nHora);                                      //Hora en formato bcd en byte bajo de registro 1
+    TUF.setTransmitBuffer(1, Temp);                       
     Temp = 0;
-    Temp = IntToBcd(nYear) << 8;
-    Temp = Temp + IntToBcd(nMes);
+    Temp = IntToBcd(nYear) << 8;                                        //Año en formato bcd en byte alto de registro 2
+    Temp = Temp + IntToBcd(nMes);                                       //Mes en formato bcd en byte bajo de registro 2
     TUF.setTransmitBuffer(2, Temp);
-    TUF.writeMultipleRegisters (Registro_DateTime-1, 3);
+    TUF.writeMultipleRegisters (Registro_DateTime-1, 3);                //Se graban en TUF-2000M los tres registros
 
-    TUF.writeSingleRegister (Registro_Menu-1, Menu_DateTime);            //Pantalla Fecha/Hora
+    TUF.writeSingleRegister (Registro_Menu-1, Menu_DateTime);           //Pantalla Fecha/Hora. Se podia acceder tambien con la funcion WindowMenu (Menu_DateTime)
 
 }
 /**
