@@ -9,7 +9,7 @@
 * Necesita las librerias:
 *
 *    ModbusMaster   en  https://github.com/4-20ma/ModbusMaster
-*    SoftwareSerial en h ttps://github.com/junhuanchen/Esp32-SoftwareSerial/tree/master
+*    SoftwareSerial en https://github.com/junhuanchen/Esp32-SoftwareSerial/tree/master
 *
 * Docuemntación de interés
 *
@@ -80,7 +80,7 @@ https://images-na.ssl-images-amazon.com/images/I/91CvZHsNYBL.pdf
 #define Segundo                             0x32					//Unidades de tiempo Segundo (2)
 #define Minuto                              0x33					//Unidades de tiempo Minuto (3)
 //Opciones en Menu 39
-#define Ingles		                        0x33	   		        //Idioma utilizado Ingles. Mas Opciones descritas en M39
+#define Ingles		                        0x33	   		        //Idioma utilizado Ingles(3). Mas Opciones descritas en M39
 
 
 
@@ -94,52 +94,33 @@ https://images-na.ssl-images-amazon.com/images/I/91CvZHsNYBL.pdf
 #define Key_Incrementar                   0x003F                    //Incrementar
 #define Key_Decrementar                   0x003E                    //Decrementar
 
-/*------------------------------------
-    Configuracion del sistema
---------------------------------------*/
-//Configuracion TUF-2000M
-int Idioma = Ingles;
-int Unidades = Litros;
-int UnidaddeTiempo = Hora;
-int Fluido = Agua;
-
-//Datos tuberia
-int OuterDiameter = 380;
-int thickness = 3175;
-int InnerDiameter = 0;
-int Material = Cobre;    
-int TransducerType =  ClampOnTS2;    
-int TransducerMounting = VMethod;               
-
 
 #define DebugTuf																				//Flag para Debug
 
-ModbusMaster TUF;																				//Asignamos a la variable TUF el bus ModBus
+extern ModbusMaster TUF;																				//Asignamos a la variable TUF el bus ModBus
 
 
 void EnterKey (int nKey);																		//Funcion para simular la pulsacion de una tecla o la entrada de un digito
 void WindowMenu (int nMenu);																	//Funcion para ir a un Menu determinado
 
-void ConfiguraIdioma (void);																	//Funcion que configura el idioma
+void ConfiguraIdioma (int Idioma);																//Funcion que configura el idioma
 void ConfiguraHoraFecha (  int nSg, int nMinutos, int nHora, int nDia, int nMes, int nAno );	//Funcion para configurar la fecha y hora del TUF-2000M
-void ConfiguraUnidades (void);																	//Funcion que configura las unidades del fluido y fe tiempo
-void Configura(void);																			//Realiza toda la configuracion del sistema con los siguientes configuraciones
-	void ConfiguraPipe (void);																	//Configura las caracteristicas de la tuberia									
-		void ConfiguraOuterDiameterPipe (void);													//Configura el diametro exterior de la tuberia
-		void ConfiguraThicknessPipe (void);														//Configura el grosor del cobre
-		void ConfiguraMaterialPipe (void);														//Configura el material de la tuberia
-		void ConfiguraFluidType (void);															//Configura el tipo de fluido
-		void ConfiguraTransducerType (void);													//Configura el tipo de transductor
-		void ConfiguraTransducerMounting (void);												//Configura el modo de instalacion de los sensores
-		void ConfiguracionSave(void);															//Salva la configuracion a memoria Flash del TUF-2000M
+void ConfiguraUnidades  (int UnidadesFluido, int UnidaddeTiempo);								//Funcion que configura las unidades del fluido y de tiempo
+void ConfiguraOuterDiameterPipe (int OuterDiameter, int nDecimales);							//Configura el diametro exterior de la tuberia
+void ConfiguraThicknessPipe (int thickness, int nDecimales);									//Configura el grosor del cobre
+void ConfiguraMaterialPipe (int Material);														//Configura el material de la tuberia
+void ConfiguraFluidType (int Fluido);															//Configura el tipo de fluido
+void ConfiguraTransducerType (int TransducerType );												//Configura el tipo de transductor
+void ConfiguraTransducerMounting (int TransducerMounting);										//Configura el modo de instalacion de los sensores
+void ConfiguracionSave(void);																	//Salva la configuracion a memoria Flash del TUF-2000M
 
 
 int IntToBcd (int nDato );																		//Convierte un numero decimal en el correposndiente BCD
-void WriteNumber ( int nNumero );																//Escribe un numero en un registro digito a digito
+void WriteNumber ( int nNumero, int nDecimales );												//Escribe un numero en un registro digito a digito
 float LeeRegistrosFloat ( int nRegistro );														//Lee el dato float de un par de registyros
 long LeeRegistrosLong ( int nRegistro );														//Lee el dato long de un par de registros
 
-float readFlow(void);
+float ReadFlow(void);
 float ReadPositiveAcumulator (void);
 float FlowForTodayDecimal (void);
 float FlowForMonthDecimal (void);

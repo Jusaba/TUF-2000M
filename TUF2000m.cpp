@@ -19,8 +19,52 @@
 
 #include <TUF2000M.h>
 
+/****************************************************************************
+ * Funciones auxiliares
+ * 
+ * void EnterKey (int nKey)
+ * void WindowMenu (int nMenu)
+ * long LeeRegistrosLong ( int nRegistro )
+ * float LeeRegistrosFloat ( int nRegistro )
+ */
 
-
+/**
+* @brief Simula la pulsacion de una tecla en el teclado fronatal
+* @param nKey.- Valor de la tecla que se quiere pulsar segun tabla Key Value del apartado 7.4 de especificaciones de TUF-2000M
+*/
+void EnterKey (int nKey)
+{
+  uint8_t  result;
+  result = TUF.writeSingleRegister (Registro_Tecla-1,nKey);                 //Ponemos en registro de pulsación la tecla que se desea simular
+  if (result == TUF.ku8MBSuccess)
+  {
+    #ifdef DebugTuf
+      Serial.println ("EnterKey -> Tecla aceptada ");
+    #endif  
+  }else{
+    #ifdef DebugTuf
+      Serial.println ("EnterKey -> Tecla no aceptada ");
+    #endif  
+  }
+}
+/**
+* @brief Va a una ventana de Menu
+*
+* @param nMenu.- Ventana del menu al que se quiere acceder
+*/
+void WindowMenu (int nMenu)
+{
+   uint8_t result;
+   result = TUF.writeSingleRegister (Registro_Menu-1, nMenu);            //Ventana de menu nMenu
+} 
+/**
+* @brief Simula la pulsación de un numero digito a digito
+*
+* A esta función se le pasa un numero y el numero de decimales que tiene el numero y simula la pulsación digito a digito incluida la coma 
+*
+* @param nNumero.- Numero a simular, maximo 4 digitos
+* @param nDecimales.- Numero de decimales del numero a simular
+*/
 void WriteNumber ( int nNumero, int nDecimales )
 {
     int nDigito;
@@ -71,12 +115,12 @@ void WriteNumber ( int nNumero, int nDecimales )
 
 }
 /**
-  * @brief Lee el dato long de un par de registros
-  * 
-  * @param nRegistro.- Primer registro a leer
-  * 
-  * @return Devuelve el long almacenado en el par de registros
-  */
+* @brief Lee el dato long de un par de registros
+* 
+* @param nRegistro.- Primer registro a leer
+* 
+* @return Devuelve el long almacenado en el par de registros
+*/
   long LeeRegistrosLong ( int nRegistro )
   {
       uint16_t buf[LONG_DATA_SIZE];
@@ -107,13 +151,13 @@ void WriteNumber ( int nNumero, int nDecimales )
     }
 
 
-  /**
-  * @brief Lee el dato float de un par de registyros
-  * 
-  * @param nRegistro.- Primer registro a leer
-  * 
-  * @return Devuelve el float almacenado en el par de registros
-  */
+/**
+* @brief Lee el dato float de un par de registyros
+* 
+* @param nRegistro.- Primer registro a leer
+* 
+* @return Devuelve el float almacenado en el par de registros
+*/
   float LeeRegistrosFloat ( int nRegistro )
   {
       uint16_t buf[FLOAT_DATA_SIZE];
@@ -123,7 +167,7 @@ void WriteNumber ( int nNumero, int nDecimales )
       result = TUF.readHoldingRegisters(nRegistro, FLOW_DATA_SIZE);
       if (result == TUF.ku8MBSuccess)
       {
-        for (j = 0; j < FLOAT_DATA_SIZE; j++)FLOAT_DATA_SIZE
+        for (j = 0; j < FLOAT_DATA_SIZE; j++)
         {
           buf[j] = TUF.getResponseBuffer(j);
         }    
@@ -141,39 +185,30 @@ void WriteNumber ( int nNumero, int nDecimales )
         #endif  
       }
       return (DatoSalida);
-    }
+  }
 
-
-/**
-* @brief Va a una ventana de Menu
-*
-* @param nMenu.- Ventana del menu al que se quiere acceder
-*/
-void WindowMenu (int nMenu)
-{
-   uint8_t result;
-   result = TUF.writeSingleRegister (Registro_Menu-1, nMenu);            //Ventana de menu nMenu
-} 
 
 
 /************************************************
-* Configuraciones
-*   ConfiguraIdioma()     -> Ingles
+* Funciones de configuracion
+*   ConfiguraIdioma()     
 *   ConfiguraHoraFecha (  int nSg, int nMinutos, int nHora, int nDia, int nMes, int nAno )
-*   Configura Unidades    -> litros
-*   ConfiguraOuterDiameterPipe ()  -> OuterDiameter/10
-*   ConfiguraThicknessPipe () -> thickness/1000
-*   ConfiguraMaterialPipe () -> Cobre
-*   ConfiguraFluidType () -> Agua
-*   ConfiguraTransducerType () -> TS2
-*   ConfiguraTransducerMounting () -> V 
+*   Configura Unidades    
+*   ConfiguraOuterDiameterPipe ()  
+*   ConfiguraThicknessPipe () 
+*   ConfiguraMaterialPipe () 
+*   ConfiguraFluidType () 
+*   ConfiguraTransducerType () 
+*   ConfiguraTransducerMounting () 
 *   ConfigurcionSave() 
 */
 
 /**
 * @brief Configura el idioma a Ingles
+*
+* @parameter Idioma.- Numero de idioma deseado
 */
-void ConfiguraIdioma (void)
+void ConfiguraIdioma (int Idioma)
 {
 	uint8_t result;
   
@@ -235,8 +270,11 @@ void ConfiguraHoraFecha (  int nSg, int nMinutos, int nHora, int nDia, int nMes,
 * @brief Configura las unidades de medida caudal con las unidades almacenadas e Unidades y UnidaddeTiempo
 *
 * Los seleccionados serán l/h o m3/h
+*
+* @param UnidadesFluido.- Nuemro de la opción de las unidades de fluido segun menu 31
+* @param UnidaddeTiempo.- Numero de la opcion de unidad de tiempo segun menu 31 
 */
-void ConfiguraUnidades (void)
+void ConfiguraUnidades (int UnidadesFluido, int UnidaddeTiempo)
 {
   uint8_t result;
   WindowMenu(Menu_Unidades);                                                   //Pantalla idioma
@@ -245,7 +283,7 @@ void ConfiguraUnidades (void)
   {
       EnterKey(Key_Enter);                                                  //<Ent>
       delay(20);    
-      EnterKey(Unidades);
+      EnterKey(UnidadesFluido);
       delay(20);
       EnterKey(Key_Enter);                                                  //<Ent>
       delay(20);    
@@ -266,8 +304,13 @@ void ConfiguraUnidades (void)
 ******************************************************
 * @brief Configura el diametro exterior de la tuberia
 * El diametro se encuentra en la variable global OuterDiameter
+*
+* @param OuterDiameter.- Diametro exterior de la tuberia
+* @param nDecimales.- Numero de decimales en el dato pasado como OuterDiameter
+*
+* Ejemplo, un diametro de 28.5 mm se registraria  con  ConfiguraOuterDiameterPipe (285, 1);
 */
-void ConfiguraOuterDiameterPipe (void)
+void ConfiguraOuterDiameterPipe (int OuterDiameter, int nDecimales)
 {
     uint8_t result;
     WindowMenu(MenuOuterDiameterPipe);                                                   //Pantalla Outer Diameter Pipe
@@ -277,7 +320,7 @@ void ConfiguraOuterDiameterPipe (void)
       EnterKey(Key_Enter);                                                              //<Ent>
       delay(20);
 
-      WriteNumber(OuterDiameter, 1);
+      WriteNumber(OuterDiameter, nDecimales);
 
       EnterKey(Key_Enter);                                                  //<Ent>
       delay(20);
@@ -296,8 +339,14 @@ void ConfiguraOuterDiameterPipe (void)
 ******************************************************
 * @brief Configura el grosor de la pared de la tuberia
 * El dato se encuentra en la variable global thickness
+*
+* @param thickness.- Grosor del cobre de la tuberia
+* @param nDecimales.- Numero de decimales en el dato pasado como OuterDiameter
+*
+* Ejemplo, un grosor de 3.175 mm se registraria  con  ConfiguraThicknessPipe (3175, 3);
+*
 */
-void ConfiguraThicknessPipe (void)
+void ConfiguraThicknessPipe (int thickness, int nDecimales)
 {
     uint8_t result;
     WindowMenu(MenuThicknessPipe);                                                   //Pantalla Thickness Pipe
@@ -307,7 +356,7 @@ void ConfiguraThicknessPipe (void)
       EnterKey(Key_Enter);                                                              //<Ent>
       delay(20);
 
-      WriteNumber(thickness, 3);
+      WriteNumber(thickness, nDecimales);
 
       EnterKey(Key_Enter);                                                  //<Ent>
       delay(20);
@@ -328,8 +377,10 @@ void ConfiguraThicknessPipe (void)
 ******************************************************
 * @brief Configura el material de la tuberia
 * El material se encuentra en la variable global Material
+*
+* @param Material.- Numero para opcion de material deseado segun Menu 14
 */
-void ConfiguraMaterialPipe (void)
+void ConfiguraMaterialPipe (int Material)
 {
     uint8_t result;
     WindowMenu(MenuMaterialPipe);                                                      //Pantalla Material Pipe
@@ -357,8 +408,10 @@ void ConfiguraMaterialPipe (void)
 ******************************************************
 * @brief Configura el fluido que circula por la tuberia
 * El tipo de fluido se encuentra en la variable global Fluido
+*
+*@param Fluido.- Numero de opción para el fluido seleccionado en Menu 20
 */
-void ConfiguraFluidType (void)
+void ConfiguraFluidType (int Fluido)
 {
     uint8_t result;
     WindowMenu(MenuFluidType);                                                          //Pantalla Fluid Type
@@ -386,8 +439,10 @@ void ConfiguraFluidType (void)
 ******************************************************
 * @brief Configura el tipo de transductor que utiliza
 * El modelo de transductor se encuentra en la variable global TransducerType
+*
+* @param TransducerType.- Tipo de transductor empleado segun descripción en Menu 23
 */
-void ConfiguraTransducerType (void)
+void ConfiguraTransducerType (int TransducerType)
 {
     uint8_t result;
     int nOpcion;
@@ -428,8 +483,10 @@ void ConfiguraTransducerType (void)
 ******************************************************
 * @brief Configura el metodo de montaje de los transductores
 * El tipo de metodp se encuentra en la variable global TransducerMounting
+*
+* @param TransducerMounting.- Tipo de montaje de los transductores segun descripcion en Menu 24
 */
-void ConfiguraTransducerMounting (void)
+void ConfiguraTransducerMounting (int TransducerMounting)
 {
     uint8_t result;
     WindowMenu(MenuTransducerMounting);                                             //Pantalla Transducer Mounting
@@ -476,33 +533,6 @@ void ConfiguracionSave (void)
 
   }      
 }
-/**
-******************************************************
-* @brief Configura los parametros de la tuberia
-* Diametro exterior de la tuberia, grosor de las paredes de la tuberia, Material, Fluido, tipo de transductor, montaje de los trasductores
-* Deja en pantalla la distancia que debe haber entre los transductores
-*/
-void ConfiguraPipe (void)
-{
-  ConfiguraOuterDiameterPipe ();
-  ConfiguraThicknessPipe ();
-  ConfiguraMaterialPipe ();
-  ConfiguraFluidType();
-  ConfiguraTransducerType();
-  ConfiguraTransducerMounting();
-  ConfiguracionSave();
-  WindowMenu(MenuTransducerSpacing);                                             //Pantalla Transducer distance mounting
-}
-/**
-******************************************************
-* @brief Configura todos los parametros de la instalación
-*/
-void Configura(void)
-{
-  Serial.println("###########################################################################");
-  ConfiguraPipe();
-}
-
 /************************************************
 * Lectura de Registros/Datos
 
@@ -512,17 +542,17 @@ void Configura(void)
 * @brief Lee el registro 'flow RATE' (0001) 
 * 
 */
-float readFlow(void) {
+float ReadFlow(void) {
 
     float flow = LeeRegistrosFloat(Registro_Flow);
 
     #ifdef DebugTuf
       if ( flow != -1) 
       {
-        Serial.print("readFlow-> El caudal es:  ");
+        Serial.print("ReadFlow-> El caudal es:  ");
         Serial.println(flow, 6);
       }else{       
-        Serial.println("readFlow-> Lectura erronea ");
+        Serial.println("ReadFlow-> Lectura erronea ");
       }  
     #endif
     return (flow);
@@ -585,25 +615,7 @@ float FlowForYearDecimal (void)
 }
 
 
-/**
-* @brief Simula la pulsacion de una tecla en el teclado fronatal
-* @param nKey.- Valor de la tecla que se quiere pulsar segun tabla Key Value del apartado 7.4 de especificaciones de TUF-2000M
-*/
-void EnterKey (int nKey)
-{
-  uint8_t  result;
-  result = TUF.writeSingleRegister (Registro_Tecla-1,nKey);                 //Ponemos en registro de pulsación la tecla que se desea simular
-  if (result == TUF.ku8MBSuccess)
-  {
-    #ifdef DebugTuf
-      Serial.println ("EnterKey -> Tecla aceptada ");
-    #endif  
-  }else{
-    #ifdef DebugTuf
-      Serial.println ("EnterKey -> Tecla no aceptada ");
-    #endif  
-  }
-}
+
 
 /**
 * @brief Convierte un numero decimal en el correposndiente BCD

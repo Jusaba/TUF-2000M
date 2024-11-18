@@ -36,14 +36,14 @@ En primer lugar, como se ha dicho, la mayor parte de la configuración del dispo
 
 El **registro 60** denominado **GO TO WINDOW** nos permite acceder al **menu** de la posición indicada por este registro, si queremos acceder al **menú 39** que es el **menú** para la configuración del idioma,  pondremos en el **registro 60** el valor **39**.
 
-El **registro 59** denominado **KEY TO IMPUT** nos permite simular la pulsación de una de las teclas del frontal o la pulsación de un número, para conseguirlo deberemos introducir en el **registro 59** el código de la tecla que queremos pulsar según la tabla detallada en el apartado **7.4 KEY VALUE TABLE** del manual.
+El **registro 59** denominado **KEY TO INPUT** nos permite simular la pulsación de una de las teclas del frontal o la pulsación de un número, para conseguirlo deberemos introducir en el **registro 59** el código de la tecla que queremos pulsar según la tabla detallada en el apartado **7.4 KEY VALUE TABLE** del manual.
 
 Con estos dos **registros** podemos acceder con el **ESP32**  a los **menús** como si lo hicieramos desde el frontal del dispositivo.
 
 Las funciones que se han dispuesto para acceso a la configuración son
 
-    void EnterKey (int nKey);	  //Funcion para simular la pulsacion de una tecla o la entrada de un digito
-    void WindowMenu (int nMenu);  //Funcion para ir a un Menu determinado
+    void EnterKey (int nKey);       //Funcion para simular la pulsacion de una tecla o la entrada de un digito
+    void WindowMenu (int nMenu);    //Funcion para ir a un Menu determinado
 
 
 
@@ -51,36 +51,37 @@ A titulo de ejemplo, para configurar en el dispositivo el idioma inglés, lo pod
 
 ```C++
 
-    #define Menu_Idioma	0x0039       //Menu Idioma
-    #define Ingles      0x33         //Ingles es la opción 3
-    #define Key_Enter   0x003D       //Enter
+    #define Menu_Idioma	0x0039          //Menu Idioma
+    #define Ingles      0x33            //Ingles es la opción 3
+    #define Key_Enter   0x003D          //Enter
     
     uint8_t result;
 
-  WindowMenu(Menu_Idioma);           //Vamos al Menu 30 que es el de idioma
-  delay(20);  
-  if (result == TUF.ku8MBSuccess)    //Si ha habido exito
-  {
-      EnterKey(Key_Enter);          //Simulamos la tecla <ENT>
-      delay(20);    
-      EnterKey(Idioma);             //Simulamos la opción 3 del Menu
-      delay(20);
-      EnterKey(Key_Enter);          //Volvemos a pulsar <ENT>
-      delay(20);
-      WindowMenu (Menu_0);          //Vamos a la pantalla de menu 0
-      delay(20); 	  
-  }	
+    WindowMenu(Menu_Idioma);            //Vamos al Menu 30 que es el de idioma
+    delay(20);  
+    if (result == TUF.ku8MBSuccess)     //Si ha habido exito
+    {
+        EnterKey(Key_Enter);            //Simulamos la tecla <ENT>
+        delay(20);    
+        EnterKey(Idioma);               //Simulamos la opción 3 del Menu
+        delay(20);
+        EnterKey(Key_Enter);            //Volvemos a pulsar <ENT>
+        delay(20);
+        WindowMenu (Menu_0);            //Vamos a la pantalla de menu 0
+        delay(20); 	  
+    }	
 
 ```
 
-Cada **menú** tiene distintas opciones, en TUF2000M.h se han definido unas cuantas opciones, solo las que se han necesitado en el proyecto. Lo suyo sería definir todas las opciones pero queda como tarea pendiente definir las ocpciones necesarias en cada proyecto.
+Cada **menú** tiene distintas opciones, en **TUF2000M.h** se han definido unas cuantas opciones, solo las que se han necesitado en el proyecto. Lo suyo sería definir todas las opciones pero queda como tarea pendiente definir las ocpciones necesarias en cada proyecto.
 
 Otras funciones necesarias para configurar o leer los datos de los **registros**  del dispositivo son:
 
-    int IntToBcd (int nDato );					        //Convierte un numero decimal en el correposndiente BCD 
+    int IntToBcd (int nDato );                          //Convierte un numero decimal en el correposndiente BCD 
     void WriteNumber ( int nNumero, int nDecimales );	//Escribe un numero en un registro digito a digito
-    float LeeRegistrosFloat ( int nRegistro );	        //Lee el dato float de un par de registyros
+    float LeeRegistrosFloat ( int nRegistro );	        //Lee el dato float de un par de registros
     long LeeRegistrosLong ( int nRegistro );	        //Lee el dato long de un par de registros
+
 
 ## Funciones de configuración.
 El funciones para configurar el dispositivo son las siguientes:
@@ -88,24 +89,22 @@ El funciones para configurar el dispositivo son las siguientes:
     void ConfiguraIdioma (void); 	         //Funcion que configura el idioma
     void ConfiguraUnidades (void);	         //Funcion que configura las unidades del fluido y de tiempo
 	void ConfiguraOuterDiameterPipe (void);	 //Configura el diametro exterior de la tuberia
-	void ConfiguraThicknessPipe (void);		 //Configura el grosor del cobre
-	void ConfiguraMaterialPipe (void);		 //Configura el material de la tuberia
-	void ConfiguraFluidType (void);			 //Configura el tipo de fluido
+	void ConfiguraThicknessPipe (void);      //Configura el grosor del cobre
+	void ConfiguraMaterialPipe (void);       //Configura el material de la tuberia
+	void ConfiguraFluidType (void);          //Configura el tipo de fluido
 	void ConfiguraTransducerType (void);	 //Configura el tipo de transductor
 	void ConfiguraTransducerMounting (void); //Configura el modo de instalacion de los sensores
+    void ConfiguracionSave(void);			//Salva la configuracion a memoria Flash del TUF-2000M
 
 No se han desarrollado todas las funciones posible pero cualquiera de las relacionadas puede servir de guía para poder crear cualquier otra que se necesite en un proyecto especifico.
 
-Unas funciones funcionan como la detallada para configurar el idioma, otras como por ejemplo la del diametro de la tuberia necesita que se introduzca el diametro dígito a dígito, por ejemplo para poner un diametro de 20,5 mm será necesario simular la pulsación de el 2, luego el 0, la coma y el 5 y lo haríamos de la siguiente forma
+Unas funciones funcionan como la detallada para configurar el idioma, otras como  la del diametro de la tuberia necesita que se introduzca el diametro dígito a dígito, por ejemplo para poner un diametro de 20,5 mm será necesario simular la pulsación de el 2, luego el 0, la coma y el 5 y lo haríamos de la siguiente forma
 
 ```C++
     WriteNumber ( 205, 1);
 ```
 
 La función **ConfiguraTransducerType()** necesita una mención especial, NO HE CONSEGUIDO poener el número 19 que es el tipo que se necesita en este proyecto y he tenido que hacerlo de una forma un tanto anormal. Si el tipo es menor que 10, se simula directamente el digito correspondiente al tipo deseado, si es mayor de 9, se simula la pulsación del 9 y luego se simula la tecla de incrementar hasta alcanzar el nuemro correspondiente al tipo deseado. Seguro que no es la manera adecuada pero ha sido la manera con la que lo he conseguido.
+						
 
-Se han creado otras dos funciones para configuración paro que no hacen otra cosa que llamar a las anteriores
-
-    void Configura(void);	    //Realiza toda la configuracion del sistema 
-	void ConfiguraPipe (void);	//Configura las caracteristicas de la tuberia									
-
+## Funciones de lectura de datos.
