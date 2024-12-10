@@ -28,13 +28,13 @@ Esos **registros** son de 16 bit y almacenan datos en formato pareja de BCD de 2
 
 La mayor parte de la configuración debe hacerse con los **menús**, para acceder a los datos, se puede hacer por pantalla o bien leyendo con el **ESP32** por **MODBUS RS-485** los **registros** mencionados anteriormente.
 
-Se han definido unos cuantos **menus**, unos cuantos **registros** y unas cuantas opciones de **menus**, los necesarios para la puesta en marcha del proyecto que ha originado la creación de esta libreria. Las definiciones son una minima parte de las que realmente existen y lo suyo sería contemplarlas todas pero como que no aporta nada al proyecto se deja pendiente para que se puedan definir en otros proyectos.
+En **TUF2000m.h** se han definido unos cuantos **menus**, unos cuantos **registros** y unas cuantas opciones de **menus**, los necesarios para la puesta en marcha del proyecto que ha originado la creación de esta libreria. Las definiciones son una mínima parte de las que realmente existen y lo suyo sería contemplarlas todas pero como que no aporta nada al proyecto se deja pendiente para que se puedan definir en otros proyectos.
 
 ## Funciones basicas de la libreria.
 
 En este apartado se describirán las funciones que consideraremos auxiliares para poder manejar el dispositivo.
 
-En primer lugar, como se ha dicho, la mayor parte de la configuración del dispositivo se realiza accediendo a los **menús**. Existen un par de **registros** que nos van a facillitar el acceso a los **menus**, concretamente los **registros** **59** y **60**.
+En primer lugar, como se ha dicho, la mayor parte de la configuración del dispositivo se realiza accediendo a los **menús**. Ppara acceder a los **menús** desde **MODBUS** **RS-485**,  existen un par de **registros** que nos van a facillitar el acceso a ellos, concretamente los **registros** **59** y **60**.
 
 El **registro 60** denominado **GO TO WINDOW** nos permite acceder al **menu** de la posición indicada por este registro, si queremos acceder al **menú 39** que es el **menú** para la configuración del idioma,  pondremos en el **registro 60** el valor **39**.
 
@@ -81,6 +81,7 @@ Otras funciones necesarias para configurar o leer los datos de los **registros**
 
     int IntToBcd (int nDato );                          //Convierte un numero decimal en el correposndiente BCD 
     void WriteNumber ( int nNumero, int nDecimales );	//Escribe un numero en un registro digito a digito
+    int LeeRegistrosInt ( int nRegistro )               //Lee el dato int de un registro
     float LeeRegistrosFloat ( int nRegistro );	        //Lee el dato float de un par de registros
     long LeeRegistrosLong ( int nRegistro );	        //Lee el dato long de un par de registros
 
@@ -88,17 +89,20 @@ Otras funciones necesarias para configurar o leer los datos de los **registros**
 ## Funciones de configuración.
 El funciones para configurar el dispositivo son las siguientes:
 
-    void ConfiguraIdioma (void); 	         //Funcion que configura el idioma
-    void ConfiguraUnidades (void);	         //Funcion que configura las unidades del fluido y de tiempo
-	void ConfiguraOuterDiameterPipe (void);	 //Configura el diametro exterior de la tuberia
-	void ConfiguraThicknessPipe (void);      //Configura el grosor del cobre
-	void ConfiguraMaterialPipe (void);       //Configura el material de la tuberia
-	void ConfiguraFluidType (void);          //Configura el tipo de fluido
-	void ConfiguraTransducerType (void);	 //Configura el tipo de transductor
-	void ConfiguraTransducerMounting (void); //Configura el modo de instalacion de los sensores
-    void ConfiguracionSave(void);			//Salva la configuracion a memoria Flash del TUF-2000M
 
-No se han desarrollado todas las funciones posible pero cualquiera de las relacionadas puede servir de guía para poder crear cualquier otra que se necesite en un proyecto especifico.
+    void ConfiguraIdioma (int Idioma);																//Funcion que configura el idioma
+    void ConfiguraHoraFecha (  int nSg, int nMinutos, int nHora, int nDia, int nMes, int nAno );	//Funcion para configurar la fecha y hora del TUF-2000M
+    void ConfiguraUnidades  (int UnidadesFluido, int UnidaddeTiempo);								//Funcion que configura las unidades del fluido y de tiempo
+    void ConfiguraOuterDiameterPipe (int OuterDiameter, int nDecimales);							//Configura el diametro exterior de la tuberia
+    void ConfiguraThicknessPipe (int thickness, int nDecimales);									//Configura el grosor del cobre
+    void ConfiguraMaterialPipe (int Material);														//Configura el material de la tuberia
+    void ConfiguraFluidType (int Fluido);															//Configura el tipo de fluido
+    void ConfiguraTransducerType (int TransducerType );												//Configura el tipo de transductor
+    void ConfiguraTransducerMounting (int TransducerMounting);										//Configura el modo de instalacion de los sensores
+    void ConfiguracionSave(void);																	//Salva la configuracion a memoria Flash del TUF-2000M
+
+
+No se han desarrollado todas las funciones posible pero cualquiera de las relacionadas puede servir de guía para poder crear cualquier otra que se necesite en otro proyecto especifico.
 
 Unas funciones funcionan como la detallada para configurar el idioma, otras como  la del diametro de la tuberia necesita que se introduzca el diametro dígito a dígito, por ejemplo para poner un diametro de 20,5 mm será necesario simular la pulsación de el 2, luego el 0, la coma y el 5 y lo haríamos de la siguiente forma
 
@@ -106,7 +110,7 @@ Unas funciones funcionan como la detallada para configurar el idioma, otras como
     WriteNumber ( 205, 1);
 ```
 
-La función **ConfiguraTransducerType()** necesita una mención especial, NO HE CONSEGUIDO poener el número 19 que es el tipo que se necesita en este proyecto y he tenido que hacerlo de una forma un tanto anormal. Si el tipo es menor que 10, se simula directamente el digito correspondiente al tipo deseado, si es mayor de 9, se simula la pulsación del 9 y luego se simula la tecla de incrementar hasta alcanzar el nuemro correspondiente al tipo deseado. Seguro que no es la manera adecuada pero ha sido la manera con la que lo he conseguido.
+La función **ConfiguraTransducerType()** necesita una mención especial, NO HE CONSEGUIDO poener el número 19 que es el tipo que se necesita en este proyecto y he tenido que hacerlo de una forma un tanto anormal. Si el tipo es menor que 10, se simula directamente el digito correspondiente al tipo deseado, si es mayor de 9, se simula la pulsación del 9 y luego se simula la tecla de incrementar hasta alcanzar el número correspondiente al tipo deseado. Seguro que no es la manera adecuada pero ha sido la manera con la que lo he conseguido.
 						
 Otra función de configuración totalmente deistina a las vistas hasta ahora es la que se encarga de registrar la fecha y hora del dispositivo
 
@@ -114,7 +118,7 @@ La función utilizada es la siguiente
 
     void ConfiguraHoraFecha (  int nSg, int nMinutos, int nHora, int nDia, int nMes, int nAno );
 
-A diferencia de las otras funciones de configuración, esta no accede a un **menu** si no que escribe en unos **registros** especificos paraw la fecha y hora.
+A diferencia de las otras funciones de configuración, esta no accede a un **menu** si no que escribe en unos **registros** especificos para la fecha y hora.
 
 ## Funciones de lectura de datos.
 
@@ -135,4 +139,17 @@ float ReadFlow(void) {
   
   }
 ```
-Al igual que en las funciones de configuración, solo se han diseñado las funciones utilizadas en el proyecto pero cualquiera de ellas puede servir como guia para recopilar otra información no recogida en este proyecto
+Al igual que en las funciones de configuración, solo se han diseñado las funciones utilizadas en el proyecto pero cualquiera de ellas puede servir como guia para recopilar otra información no recogida en este proyecto.
+
+Las funciones que se han incluido en la librería son las siguientes
+
+    float ReadFlow(void);                                                                           //Obtiene el caudal instantaneo
+    float ReadPositiveAcumulator (void);                                                            //Obtiene el caudal positivo acumulado
+    float FlowForTodayDecimal (void);                                                               //Obtine el consumo del dia actual    
+    float FlowForMonthDecimal (void);                                                               //Obtiene el consumo del mes actual
+    float FlowForYearDecimal (void);                                                                //Obtiene el consumo acumulado del año actual    
+    int ReadQ (void);                                                                               //Obtiene el valor Q de los sensores
+    int ReadUStrength (void);                                                                       //Obtiene el valor de Upstream strength    
+    int ReadDStrength (void);                                                                       //Obtiene el valor de Downstream strength                                        
+    int ReadErrorCode (void);                                                                       //Obriene el codigo de error. En nota 4 se describe a que error corresponde cada bit                                                     
+

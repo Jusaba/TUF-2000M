@@ -109,10 +109,16 @@ https://images-na.ssl-images-amazon.com/images/I/91CvZHsNYBL.pdf
 
 extern ModbusMaster TUF;																				//Asignamos a la variable TUF el bus ModBus
 
-
+//Funciones auxiliares
 void EnterKey (int nKey);																		//Funcion para simular la pulsacion de una tecla o la entrada de un digito
 void WindowMenu (int nMenu);																	//Funcion para ir a un Menu determinado
+int IntToBcd (int nDato );																		//Convierte un numero decimal en el correposndiente BCD
+void WriteNumber ( int nNumero, int nDecimales );												//Escribe un numero en un registro digito a digito
+int LeeRegistrosInt ( int nRegistro );                                                          //Lee el dato INT de un registro
+float LeeRegistrosFloat ( int nRegistro );														//Lee el dato float de un par de registros
+long LeeRegistrosLong ( int nRegistro );														//Lee el dato long de un par de registros
 
+//Funciones configuracion
 void ConfiguraIdioma (int Idioma);																//Funcion que configura el idioma
 void ConfiguraHoraFecha (  int nSg, int nMinutos, int nHora, int nDia, int nMes, int nAno );	//Funcion para configurar la fecha y hora del TUF-2000M
 void ConfiguraUnidades  (int UnidadesFluido, int UnidaddeTiempo);								//Funcion que configura las unidades del fluido y de tiempo
@@ -125,21 +131,16 @@ void ConfiguraTransducerMounting (int TransducerMounting);										//Configura 
 void ConfiguracionSave(void);																	//Salva la configuracion a memoria Flash del TUF-2000M
 
 
-int IntToBcd (int nDato );																		//Convierte un numero decimal en el correposndiente BCD
-void WriteNumber ( int nNumero, int nDecimales );												//Escribe un numero en un registro digito a digito
-int LeeRegistrosInt ( int nRegistro );                                                          //Lee el dato INT de un registro
-float LeeRegistrosFloat ( int nRegistro );														//Lee el dato float de un par de registros
-long LeeRegistrosLong ( int nRegistro );														//Lee el dato long de un par de registros
 
-float ReadFlow(void);
-float ReadPositiveAcumulator (void);
-float FlowForTodayDecimal (void);
-float FlowForMonthDecimal (void);
-float FlowForYearDecimal (void);
-int ReadQ (void);
-int ReadUStrength (void);
-int ReadDStrength (void);
-int ReadErrorCode (void);
+float ReadFlow(void);                                                                           //Obtiene el caudal instantaneo
+float ReadPositiveAcumulator (void);                                                            //Obtiene el caudal positivo acumulado
+float FlowForTodayDecimal (void);                                                               //Obtine el consumo del dia actual    
+float FlowForMonthDecimal (void);                                                               //Obtiene el consumo del mes actual
+float FlowForYearDecimal (void);                                                                //Obtiene el consumo acumulado del año actual    
+int ReadQ (void);                                                                               //Obtiene el valor Q de los sensores
+int ReadUStrength (void);                                                                       //Obtiene el valor de Upstream strength    
+int ReadDStrength (void);                                                                       //Obtiene el valor de Downstream strength                                        
+int ReadErrorCode (void);                                                                       //Obriene el codigo de error. En nota 4 se describe a que error corresponde cada bit                                                     
 
 
 
