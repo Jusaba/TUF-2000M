@@ -70,7 +70,6 @@ void WriteNumber ( int nNumero, int nDecimales )
     int nDigito;
     int nNumeroTmp = nNumero;
     int nDecimal = 0;
-
     #ifdef DebugTuf
       Serial.println ("WriteNumber -> Inicio ");
     #endif  
@@ -94,7 +93,6 @@ void WriteNumber ( int nNumero, int nDecimales )
         EnterKey(0x3A);
         delay(20);
     }
- 
     nNumeroTmp = nNumeroTmp - ( nDigito * 100);
     nDigito = int(nNumeroTmp/10);
     EnterKey(nDigito);
@@ -105,7 +103,6 @@ void WriteNumber ( int nNumero, int nDecimales )
         EnterKey(0x3A);
         delay(20);
     }
- 
     nNumeroTmp = nNumeroTmp - ( nDigito * 10);
     EnterKey(nNumeroTmp);
     delay(20);
@@ -114,6 +111,34 @@ void WriteNumber ( int nNumero, int nDecimales )
     #endif  
 
 }
+/**
+* @brief Lee el dato int de un registro
+* 
+* @param nRegistro.- Registro a leer
+* 
+* @return Devuelve el int almacenado en el registro
+*/
+  int LeeRegistrosInt ( int nRegistro )
+  {
+    uint16_t buf[INT_DATA_SIZE];
+    uint8_t  result;
+    int DatoSalida = 0;
+    result = TUF.readHoldingRegisters(nRegistro, INT_DATA_SIZE);
+    if (result == TUF.ku8MBSuccess)
+    {
+      buf[0] = TUF.getResponseBuffer(0);
+      memcpy(&DatoSalida, &buf, sizeof(int));       
+      #ifdef DebugTuf
+        Serial.print ("LeeRegistroInt -> Dato Leido:  ");
+        Serial.println (DatoSalida);
+      #endif  
+    }else{
+      #ifdef DebugTuf
+        Serial.println ("LeeRegistrosInt -> Error de lectura  ");
+      #endif  
+    }
+    return (DatoSalida);
+  }
 /**
 * @brief Lee el dato long de un par de registros
 * 
@@ -348,6 +373,7 @@ void ConfiguraOuterDiameterPipe (int OuterDiameter, int nDecimales)
 */
 void ConfiguraThicknessPipe (int thickness, int nDecimales)
 {
+
     uint8_t result;
     WindowMenu(MenuThicknessPipe);                                                   //Pantalla Thickness Pipe
     delay(20);  
@@ -522,13 +548,13 @@ void ConfiguracionSave (void)
   delay(20); 
   if (result == TUF.ku8MBSuccess)
   {
-      EnterKey(Key_Enter);                                                  //<Ent>
+      EnterKey(Key_Enter);                                                //<Ent>
       delay(20);    
 
-      EnterKey(0x31);                                                       //Opción salvar en Flash
+      EnterKey(FLASH);                                                   //Opción salvar en Flash
       delay(20);    
 
-      EnterKey(Key_Enter);                                                  //<Ent>
+      EnterKey(Key_Enter);                                               //<Ent>
       delay(20);    
 
   }      
@@ -613,10 +639,57 @@ float FlowForYearDecimal (void)
     #endif  
     return (nDato);
 }
-
-
-
-
+/**
+* @brief Lee el registro 'Q ' (0092) 
+*/
+int ReadQ (void)
+{
+    int nDato = LeeRegistrosInt (Registro_Q-1);
+    nDato = nDato & 0x00FF;
+    #ifdef DebugTuf
+		  Serial.print("Q -> Dato Leido: ");
+      Serial.println(nDato);
+    #endif  
+    return (nDato);  
+}
+/**
+* @brief Lee el registro 'Upstream ' (0093) 
+*/
+int ReadUStrength (void)
+{
+    int nDato = LeeRegistrosInt (Registro_UStrngth-1);
+    nDato = map(nDato,0,4096,0,1000);
+    #ifdef DebugTuf
+		  Serial.print("Upstremam Strength-> Dato Leido: ");
+      Serial.println(nDato);
+    #endif  
+    return (nDato);  
+}
+/**
+* @brief Lee el registro 'Dpstream ' (0094) 
+*/
+int ReadDStrength (void)
+{
+    int nDato = LeeRegistrosInt (Registro_DStrngth-1);
+    nDato = map(nDato,0,4096,0,1000);
+    #ifdef DebugTuf
+		  Serial.print("Dpstremam Strength-> Dato Leido: ");
+      Serial.println(nDato);
+    #endif  
+    return (nDato);  
+}
+/**
+* @brief Lee el registro 'Dpstream ' (0094) 
+*/
+int ReadErrorCode (void)
+{
+    int nDato = LeeRegistrosInt (Registro_ErrorCode-1);
+    #ifdef DebugTuf
+		  Serial.print("Dpstremam Strength-> Dato Leido: ");
+      Serial.println(nDato);
+    #endif  
+    return (nDato);  
+}
 /**
 * @brief Convierte un numero decimal en el correposndiente BCD
 * Dato XY ->nibble Alto X nible bajo Y

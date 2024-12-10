@@ -1,38 +1,14 @@
-	//Librerias LoRa 32
     //Aruino & ESP32
-    #include <WebServer.h>
-    #include "esp_camera.h"
-    #include <WiFi.h>
-    #include "img_converters.h"
     #include "Arduino.h"
-    #include "soc/soc.h"           
-    #include "soc/rtc_cntl_reg.h"  
-    #include "driver/rtc_io.h"
-    #include <WebServer.h>
-    
+      
 	
 
     //#include <StringArray.h>
-    #include <SPIFFS.h>
-    #include <FS.h>
-    #include <WiFiUdp.h>
-    #include <ArduinoOTA.h>
-    #include <Wire.h>
-    #include <base64.h>
-    #include <libb64/cencode.h>
-
-    // Lora
-    #include <LoRa.h>
-    #include <SPI.h>
-    #include <Wire.h>
-
-    //Pantalla
-    #include <Adafruit_GFX.h>
-    #include <Adafruit_SSD1306.h>
 
     //Temporizacion
 	#include <ESP32Time.h>
 
+    //Comunicaciones
 	#include <SoftwareSerial.h>
 	#include <ModbusMaster.h>
 
@@ -52,12 +28,12 @@
 	int nFluido = Agua;
 	
 	//Datos tuberia
-	int nOuterDiameter = 380;                    //38.0
-	int nthickness = 3175;                      //3.175
+	int nOuterDiameter = 180;                    //18.0
+	int nthickness = 1500;                      //1.500
 	int nInnerDiameter = 0;
 	int nMaterial = Cobre;    
 	int nTransducerType =  ClampOnTS2;    
-	int nTransducerMounting = VMethod;               
+	int nTransducerMounting = WMethod;               
 	
 	ModbusMaster TUF;                           //Declarada como externa en TUF2000M.h
     int RX_PIN = 17; //                         //Rx para MODBUS
@@ -91,7 +67,7 @@
 
     void loop () {
         Serial.print ("Flujo: ");
-        Serial.println ( readFlow() );
+        Serial.println ( ReadFlow() );
         delay(100);
         Serial.print ("Acumulado: ");
         Serial.println (ReadPositiveAcumulator());

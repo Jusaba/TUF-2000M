@@ -28,8 +28,9 @@
 
 #define FLOW_DATA_SIZE 2
 
-#define LONG_DATA_SIZE 2
-#define FLOAT_DATA_SIZE  2
+#define INT_DATA_SIZE   1
+#define LONG_DATA_SIZE  2
+#define FLOAT_DATA_SIZE 2
 
 // Registros de datos
 #define Registro_Flow                          1
@@ -37,6 +38,10 @@
 #define Registro_Menu	                      60
 #define Registro_Tecla	                      59
 #define Registro_DateTime                     53
+#define Registro_ErrorCode                    72  
+#define Registro_Q                            92  
+#define Registro_UStrngth                     93
+#define Registro_DStrngth                     94
 #define RegistroFlowForTodayDecimal          139
 #define RegistroFlowForMonthDecimal          143
 #define RegistroFlowForYearDecimal           147
@@ -72,6 +77,11 @@ https://images-na.ssl-images-amazon.com/images/I/91CvZHsNYBL.pdf
 #define ClampOnTS2                            19                    //Sensores utilizados TS2 (19). Mas Opciones descritas en M23  
 //Opciones en Menu 24
 #define VMethod                             0x30                    //Metodo de instalacion de los sensores V (0). Mas Opciones descritas en M24  
+#define WMethod                             0x33                    //Metodo de instalacion de los sensores W (3). Mas Opciones descritas en M24
+//Opciones en Menu 26
+#define RAM                                 0x30                    //Salvado en RAM (0).  
+#define FLASH                               0x31                    //Salvado en FLASH (1). 
+
 //Opciones en Menu 31
 #define Metros3                             0x30                    //Unidades empleadas m3 (0). Mas Opciones descritas en M31 
 #define Litros                              0x31                    //Unidades empleadas litros (1). Mas Opciones descritas en M31 
@@ -95,7 +105,7 @@ https://images-na.ssl-images-amazon.com/images/I/91CvZHsNYBL.pdf
 #define Key_Decrementar                   0x003E                    //Decrementar
 
 
-#define DebugTuf																				//Flag para Debug
+//#define DebugTuf																				//Flag para Debug
 
 extern ModbusMaster TUF;																				//Asignamos a la variable TUF el bus ModBus
 
@@ -117,7 +127,8 @@ void ConfiguracionSave(void);																	//Salva la configuracion a memoria
 
 int IntToBcd (int nDato );																		//Convierte un numero decimal en el correposndiente BCD
 void WriteNumber ( int nNumero, int nDecimales );												//Escribe un numero en un registro digito a digito
-float LeeRegistrosFloat ( int nRegistro );														//Lee el dato float de un par de registyros
+int LeeRegistrosInt ( int nRegistro );                                                          //Lee el dato INT de un registro
+float LeeRegistrosFloat ( int nRegistro );														//Lee el dato float de un par de registros
 long LeeRegistrosLong ( int nRegistro );														//Lee el dato long de un par de registros
 
 float ReadFlow(void);
@@ -125,6 +136,10 @@ float ReadPositiveAcumulator (void);
 float FlowForTodayDecimal (void);
 float FlowForMonthDecimal (void);
 float FlowForYearDecimal (void);
+int ReadQ (void);
+int ReadUStrength (void);
+int ReadDStrength (void);
+int ReadErrorCode (void);
 
 
 
