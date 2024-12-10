@@ -80,26 +80,26 @@ Como se ha comentado anteriormente, cada **menú** tiene distintas opciones, en 
 Otras funciones necesarias para configurar o leer los datos de los **registros**  del dispositivo son:
 
     int IntToBcd (int nDato );                          //Convierte un numero decimal en el correposndiente BCD 
-    void WriteNumber ( int nNumero, int nDecimales );	//Escribe un numero en un registro digito a digito
-    int LeeRegistrosInt ( int nRegistro )               //Lee el dato int de un registro
-    float LeeRegistrosFloat ( int nRegistro );	        //Lee el dato float de un par de registros
-    long LeeRegistrosLong ( int nRegistro );	        //Lee el dato long de un par de registros
+    void WriteNumber ( int nNumero, int nDecimales );   //Escribe un numero en un registro digito a digito
+    int LeeRegistrosInt ( int nRegistro );              //Lee el dato int de un registro
+    float LeeRegistrosFloat ( int nRegistro );          //Lee el dato float de un par de registros
+    long LeeRegistrosLong ( int nRegistro );            //Lee el dato long de un par de registros
 
 
 ## Funciones de configuración.
 El funciones para configurar el dispositivo son las siguientes:
 
 
-    void ConfiguraIdioma (int Idioma);																//Funcion que configura el idioma
+    void ConfiguraIdioma (int Idioma);									                            //Funcion que configura el idioma
     void ConfiguraHoraFecha (  int nSg, int nMinutos, int nHora, int nDia, int nMes, int nAno );	//Funcion para configurar la fecha y hora del TUF-2000M
-    void ConfiguraUnidades  (int UnidadesFluido, int UnidaddeTiempo);								//Funcion que configura las unidades del fluido y de tiempo
-    void ConfiguraOuterDiameterPipe (int OuterDiameter, int nDecimales);							//Configura el diametro exterior de la tuberia
-    void ConfiguraThicknessPipe (int thickness, int nDecimales);									//Configura el grosor del cobre
-    void ConfiguraMaterialPipe (int Material);														//Configura el material de la tuberia
-    void ConfiguraFluidType (int Fluido);															//Configura el tipo de fluido
-    void ConfiguraTransducerType (int TransducerType );												//Configura el tipo de transductor
-    void ConfiguraTransducerMounting (int TransducerMounting);										//Configura el modo de instalacion de los sensores
-    void ConfiguracionSave(void);																	//Salva la configuracion a memoria Flash del TUF-2000M
+    void ConfiguraUnidades  (int UnidadesFluido, int UnidaddeTiempo);		                        //Funcion que configura las unidades del fluido y de tiempo
+    void ConfiguraOuterDiameterPipe (int OuterDiameter, int nDecimales);                            //Configura el diametro exterior de la tuberia
+    void ConfiguraThicknessPipe (int thickness, int nDecimales);                                    //Configura el grosor del cobre
+    void ConfiguraMaterialPipe (int Material);                                                      //Configura el material de la tuberia
+    void ConfiguraFluidType (int Fluido);                                                           //Configura el tipo de fluido
+    void ConfiguraTransducerType (int TransducerType );                                             //Configura el tipo de transductor
+    void ConfiguraTransducerMounting (int TransducerMounting);                                      //Configura el modo de instalacion de los sensores
+    void ConfiguracionSave(void);                                                                   //Salva la configuracion a memoria Flash del TUF-2000M
 
 
 No se han desarrollado todas las funciones posible pero cualquiera de las relacionadas puede servir de guía para poder crear cualquier otra que se necesite en otro proyecto especifico.
@@ -143,13 +143,13 @@ Al igual que en las funciones de configuración, solo se han diseñado las funci
 
 Las funciones que se han incluido en la librería son las siguientes
 
-    float ReadFlow(void);                                                                           //Obtiene el caudal instantaneo
-    float ReadPositiveAcumulator (void);                                                            //Obtiene el caudal positivo acumulado
-    float FlowForTodayDecimal (void);                                                               //Obtine el consumo del dia actual    
-    float FlowForMonthDecimal (void);                                                               //Obtiene el consumo del mes actual
-    float FlowForYearDecimal (void);                                                                //Obtiene el consumo acumulado del año actual    
-    int ReadQ (void);                                                                               //Obtiene el valor Q de los sensores
-    int ReadUStrength (void);                                                                       //Obtiene el valor de Upstream strength    
-    int ReadDStrength (void);                                                                       //Obtiene el valor de Downstream strength                                        
-    int ReadErrorCode (void);                                                                       //Obriene el codigo de error. En nota 4 se describe a que error corresponde cada bit                                                     
+    float ReadFlow(void);                         //Obtiene el caudal instantaneo
+    float ReadPositiveAcumulator (void);          //Obtiene el caudal positivo acumulado
+    float FlowForTodayDecimal (void);             //Obtine el consumo del dia actual    
+    float FlowForMonthDecimal (void);             //Obtiene el consumo del mes actual
+    float FlowForYearDecimal (void);              //Obtiene el consumo acumulado del año actual    
+    int ReadQ (void);                             //Obtiene el valor Q de los sensores
+    int ReadUStrength (void);                     //Obtiene el valor de Upstream strength    
+    int ReadDStrength (void);                     //Obtiene el valor de Downstream strength                                        
+    int ReadErrorCode (void);                     //Obriene el codigo de error. En nota 4 se describe a que error corresponde cada bit                                                     
 
